@@ -1,6 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react';
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
 
 const words = [
     { word: "แมว", image: "https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg" },
@@ -30,6 +33,7 @@ const styles = {
     },
     letterContainer: {
         display: 'flex',
+        flexWrap: 'wrap',
         marginBottom: '20px',
     },
     letter: {
@@ -39,12 +43,56 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        margin: '0 5px',
+        margin: '5px',
         cursor: 'move',
     },
 };
 
-export default function Home() {
+const DraggableLetter = ({ letter, onDrop }) => {
+    const [{ isDragging }, drag] = useDrag(() => ({
+        type: 'letter',
+        item: { letter },
+        collect: (monitor) => ({
+            isDragging: !!monitor.isDragging(),
+        }),
+    }));
+
+    return (
+        <div
+            ref={drag}
+            style={{
+                ...styles.letter,
+                opacity: isDragging ? 0.5 : 1,
+            }}
+        >
+            {letter}
+        </div>
+    );
+};
+
+const DropZone = ({ index, letter, onDrop }) => {
+    const [{ isOver }, drop] = useDrop(() => ({
+        accept: 'letter',
+        drop: (item) => onDrop(item.letter, index),
+        collect: (monitor) => ({
+            isOver: !!monitor.isOver(),
+        }),
+    }));
+
+    return (
+        <div
+            ref={drop}
+            style={{
+                ...styles.letter,
+                backgroundColor: isOver ? '#f0f0f0' : 'white',
+            }}
+        >
+            {letter}
+        </div>
+    );
+};
+
+function Game() {
     const [currentWord, setCurrentWord] = useState(null);
     const [guessedWord, setGuessedWord] = useState([]);
     const [score, setScore] = useState(0);
@@ -72,10 +120,6 @@ export default function Home() {
         }
     };
 
-    const handleDragStart = (e, letter) => {
-        e.dataTransfer.setData('text/plain', letter);
-    };
-
     if (!currentWord) return <div>Loading...</div>;
 
     return (
@@ -87,31 +131,25 @@ export default function Home() {
             </div>
             <div style={styles.letterContainer}>
                 {guessedWord.map((letter, index) => (
-                    <div
-                        key={index}
-                        style={styles.letter}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={(e) => {
-                            e.preventDefault();
-                            handleDrop(e.dataTransfer.getData('text/plain'), index);
-                        }}
-                    >
-                        {letter}
-                    </div>
+                    <DropZone key={index} index={index} letter={letter} onDrop={handleDrop} />
                 ))}
             </div>
             <div style={styles.letterContainer}>
                 {availableLetters.map((letter, index) => (
-                    <div
-                        key={index}
-                        draggable
-                        onDragStart={(e) => handleDragStart(e, letter)}
-                        style={styles.letter}
-                    >
-                        {letter}
-                    </div>
+                    <DraggableLetter key={index} letter={letter} />
                 ))}
             </div>
         </div>
+    );
+}
+
+export default function Home() {
+    const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window;
+    const Backend = isTouchDevice ? TouchBackend : HTML5Backend;
+
+    return (
+        <DndProvider backend={Backend}>
+            <Game />
+        </DndProvider>
     );
 }
