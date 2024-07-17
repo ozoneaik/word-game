@@ -8,42 +8,6 @@ const words = [
     // เพิ่มคำและรูปภาพตามต้องการ
 ];
 
-const styles = {
-    container: {
-        maxWidth: '600px',
-        margin: '0 auto',
-        padding: '20px',
-    },
-    title: {
-        fontSize: '24px',
-        fontWeight: 'bold',
-        marginBottom: '20px',
-    },
-    score: {
-        marginBottom: '20px',
-    },
-    image: {
-        width: '300px',
-        height: '300px',
-        objectFit: 'cover',
-        marginBottom: '20px',
-    },
-    letterContainer: {
-        display: 'flex',
-        marginBottom: '20px',
-    },
-    letter: {
-        width: '40px',
-        height: '40px',
-        border: '1px solid #ccc',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: '0 5px',
-        cursor: 'move',
-    },
-};
-
 export default function Home() {
     const [currentWord, setCurrentWord] = useState(null);
     const [guessedWord, setGuessedWord] = useState([]);
@@ -79,17 +43,17 @@ export default function Home() {
     if (!currentWord) return <div>Loading...</div>;
 
     return (
-        <div style={styles.container}>
-            <h1 style={styles.title}>เกมทายคำจากภาพ</h1>
-            <p style={styles.score}>คะแนน: {score}</p>
-            <div>
-                <img src={currentWord.image} alt="Guess the word" style={styles.image} />
+        <div className="container mx-auto p-4">
+            <h1 className="text-3xl font-bold mb-4">เกมทายคำจากภาพ</h1>
+            <p className="mb-4">คะแนน: {score}</p>
+            <div className="mb-4">
+                <img src={currentWord.image} alt="Guess the word" width={300} height={300} />
             </div>
-            <div style={styles.letterContainer}>
+            <div className="flex mb-4">
                 {guessedWord.map((letter, index) => (
                     <div
                         key={index}
-                        style={styles.letter}
+                        className="w-10 h-10 border border-gray-300 flex items-center justify-center m-1"
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => {
                             e.preventDefault();
@@ -100,13 +64,13 @@ export default function Home() {
                     </div>
                 ))}
             </div>
-            <div style={styles.letterContainer}>
+            <div className="flex">
                 {availableLetters.map((letter, index) => (
                     <div
                         key={index}
                         draggable
                         onDragStart={(e) => handleDragStart(e, letter)}
-                        style={styles.letter}
+                        className="w-10 h-10 border border-gray-300 flex items-center justify-center m-1 cursor-move"
                     >
                         {letter}
                     </div>
