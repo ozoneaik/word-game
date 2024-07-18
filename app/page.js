@@ -24,13 +24,11 @@ const Home = () => {
     const [gameStarted, setGameStarted] = useState(false);
     const [message, setMessage] = useState('');
     const [soundEnabled, setSoundEnabled] = useState(true);
+    const [selectedLetter, setSelectedLetter] = useState(null);
 
     const correctSoundRef = useRef(null);
     const incorrectSoundRef = useRef(null);
     const bgMusicRef = useRef(null);
-
-    const [draggedLetter, setDraggedLetter] = useState(null);
-
 
     useEffect(() => {
         correctSoundRef.current = new Audio('/sound/correct.mp3');
@@ -67,21 +65,6 @@ const Home = () => {
         return () => clearInterval(interval);
     }, [startTime, endTime]);
 
-    const handleTouchStart = (e, letter) => {
-        setDraggedLetter(letter);
-    };
-
-    const handleTouchMove = (e) => {
-        e.preventDefault(); // ป้องกันการเลื่อนหน้าจอ
-    };
-
-    const handleTouchEnd = (e, index) => {
-        if (draggedLetter) {
-            handleDrop(draggedLetter, index);
-            setDraggedLetter(null);
-        }
-    };
-
     const startGame = () => {
         const shuffled = [...initialWords].sort(() => 0.5 - Math.random());
         setCurrentWords(shuffled);
@@ -116,12 +99,17 @@ const Home = () => {
         }, []);
     };
 
-    const handleDrop = (letter, index) => {
-        const newGuessedWord = [...guessedWord];
-        if (newGuessedWord[index] === '' && availableLetters.includes(letter)) {
-            newGuessedWord[index] = letter;
+    const handleLetterSelect = (letter) => {
+        setSelectedLetter(letter);
+    };
+
+    const handleSlotSelect = (index) => {
+        if (selectedLetter && guessedWord[index] === '') {
+            const newGuessedWord = [...guessedWord];
+            newGuessedWord[index] = selectedLetter;
             setGuessedWord(newGuessedWord);
-            setAvailableLetters(availableLetters.filter(l => l !== letter));
+            setAvailableLetters(availableLetters.filter(l => l !== selectedLetter));
+            setSelectedLetter(null);
             checkWord(newGuessedWord);
         }
     };
@@ -134,10 +122,6 @@ const Home = () => {
             setGuessedWord(newGuessedWord);
             setAvailableLetters([...availableLetters, letter]);
         }
-    };
-
-    const handleDragStart = (e, letter) => {
-        e.dataTransfer.setData('text/plain', letter);
     };
 
     const checkWord = (newGuessedWord) => {
@@ -272,19 +256,11 @@ const Home = () => {
                                     style={{
                                         width: '60px',
                                         height: '60px',
-                                        cursor: letter ? 'pointer' : 'default',
+                                        cursor: 'pointer',
                                         fontSize: '24px',
                                         backgroundColor: 'white'
                                     }}
-                                    onDragOver={(e) => e.preventDefault()}
-                                    onDrop={(e) => {
-                                        e.preventDefault();
-                                        handleDrop(e.dataTransfer.getData('text/plain'), index);
-                                    }}
-                                    onClick={() => handleLetterClick(index)}
-                                    draggable={!!letter}
-                                    onDragStart={(e) => handleDragStart(e, letter)}
-                                    onTouchEnd={(e) => handleTouchEnd(e, index)}
+                                    onClick={() => handleSlotSelect(index)}
                                 >
                                     {letter}
                                 </div>
@@ -294,17 +270,15 @@ const Home = () => {
                             {availableLetters.map((letter, index) => (
                                 <div
                                     key={index}
-                                    className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center m-1"
+                                    className={`rounded-circle text-white d-flex align-items-center justify-content-center m-1 ${selectedLetter === letter ? 'border border-danger border-3' : ''}`}
                                     style={{
                                         width: '50px',
                                         height: '50px',
                                         cursor: 'pointer',
-                                        fontSize: '24px'
+                                        fontSize: '24px',
+                                        backgroundColor: selectedLetter === letter ? '#ff6b6b' : '#007bff'
                                     }}
-                                    draggable
-                                    onDragStart={(e) => handleDragStart(e, letter)}
-                                    onTouchStart={(e) => handleTouchStart(e, letter)}
-                                    onTouchMove={handleTouchMove}
+                                    onClick={() => handleLetterSelect(letter)}
                                 >
                                     {letter}
                                 </div>
