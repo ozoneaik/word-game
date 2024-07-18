@@ -29,6 +29,9 @@ const Home = () => {
     const incorrectSoundRef = useRef(null);
     const bgMusicRef = useRef(null);
 
+    const [draggedLetter, setDraggedLetter] = useState(null);
+
+
     useEffect(() => {
         correctSoundRef.current = new Audio('/sound/correct.mp3');
         incorrectSoundRef.current = new Audio('/sound/incorrect.mp3');
@@ -63,6 +66,21 @@ const Home = () => {
         }
         return () => clearInterval(interval);
     }, [startTime, endTime]);
+
+    const handleTouchStart = (e, letter) => {
+        setDraggedLetter(letter);
+    };
+
+    const handleTouchMove = (e) => {
+        e.preventDefault(); // ป้องกันการเลื่อนหน้าจอ
+    };
+
+    const handleTouchEnd = (e, index) => {
+        if (draggedLetter) {
+            handleDrop(draggedLetter, index);
+            setDraggedLetter(null);
+        }
+    };
 
     const startGame = () => {
         const shuffled = [...initialWords].sort(() => 0.5 - Math.random());
@@ -100,7 +118,7 @@ const Home = () => {
 
     const handleDrop = (letter, index) => {
         const newGuessedWord = [...guessedWord];
-        if (newGuessedWord[index] === '') {
+        if (newGuessedWord[index] === '' && availableLetters.includes(letter)) {
             newGuessedWord[index] = letter;
             setGuessedWord(newGuessedWord);
             setAvailableLetters(availableLetters.filter(l => l !== letter));
@@ -266,6 +284,7 @@ const Home = () => {
                                     onClick={() => handleLetterClick(index)}
                                     draggable={!!letter}
                                     onDragStart={(e) => handleDragStart(e, letter)}
+                                    onTouchEnd={(e) => handleTouchEnd(e, index)}
                                 >
                                     {letter}
                                 </div>
@@ -284,6 +303,8 @@ const Home = () => {
                                     }}
                                     draggable
                                     onDragStart={(e) => handleDragStart(e, letter)}
+                                    onTouchStart={(e) => handleTouchStart(e, letter)}
+                                    onTouchMove={handleTouchMove}
                                 >
                                     {letter}
                                 </div>
