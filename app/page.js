@@ -292,7 +292,7 @@ const Home = () => {
 };
 
 const containerStyle = {
-    backgroundImage: 'url("/background.jpg")',
+    backgroundImage: 'url("https://64.media.tumblr.com/bee1e64cc1ed55cfcb496698f75f96d0/tumblr_psa72l8zUo1upcvga_1280.gif")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     minHeight: '100vh',
