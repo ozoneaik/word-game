@@ -3,14 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Button, Image } from 'react-bootstrap';
 import './page.css'
-
-const initialWords = [
-    { word: "แมว", image: "https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg" },
-    { word: "หมา", image: "https://i.natgeofe.com/n/4f5aaece-3300-41a4-b2a8-ed2708a0a27c/domestic-dog_thumb_square.jpg" },
-    { word: "ไก่", image: "https://image.makewebeasy.net/makeweb/m_1920x0/Q1cSYUQ7X/ContentChicken/Chicken_History.jpg?v=202012190947" },
-    { word: "ยีราฟ", image: "https://khaokheow.zoothailand.org/zoo_office/fileupload/encyclopedia_file/2.JPG" },
-    // เพิ่มคำและรูปภาพตามต้องการ
-];
+import {initialWords} from "@/app/datasets/words";
 
 const Home = () => {
     const [currentWords, setCurrentWords] = useState([]);
@@ -32,6 +25,7 @@ const Home = () => {
     const bgMusicRef = useRef(null);
 
     useEffect(() => {
+        console.log('initialWordss',initialWords);
         correctSoundRef.current = new Audio('/sound/correct.mp3');
         incorrectSoundRef.current = new Audio('/sound/incorrect.mp3');
         bgMusicRef.current = new Audio('/sound/background-music.mp3');
