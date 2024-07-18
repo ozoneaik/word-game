@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Button, Image } from 'react-bootstrap';
+import './page.css'
 
 const initialWords = [
     { word: "แมว", image: "https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg" },
@@ -211,10 +212,11 @@ const Home = () => {
 
     if (!gameStarted) {
         return (
-            <Container className="" style={containerStyle}>
+            <Container className="pt-5" style={containerStyleMain}>
                 <Row className="justify-content-center">
-                    <Col xs={12} md={8}>
+                    <Col xs={12} md={8} className={''}>
                         <div className="text-center">
+                            <img src="https://www.wordgames.com/images/logo.png" alt="logo" width={300}/>
                             <h1 className="mb-4">เกมทายคำจากภาพ</h1>
                             <Button variant="primary" size="lg" onClick={handleStartGame}>เริ่มเกม</Button>
                         </div>
@@ -239,13 +241,16 @@ const Home = () => {
     return (
         <Container className="" style={containerStyle}>
             <Row className="justify-content-center">
+                <Col xs={12}>
+                    <Button variant={soundEnabled ? "success" : "danger"} onClick={toggleSound} className="mb-3">
+                        {soundEnabled ? "ปิดเสียง" : "เปิดเสียง"}
+                    </Button>
+                </Col>
                 <Col xs={12} md={8}>
                     <div className="text-center">
+                        <img src="https://www.wordgames.com/images/logo.png" alt="logo" width={100}/>
                         <h1 className="mb-3">เกมทายคำจากภาพ</h1>
                         <div className="mb-3">เวลา: {formatTime(currentTime)} วินาที</div>
-                        <Button variant={soundEnabled ? "success" : "danger"} onClick={toggleSound} className="mb-3">
-                            {soundEnabled ? "ปิดเสียง" : "เปิดเสียง"}
-                        </Button>
                         <Image src={currentWords[currentWordIndex].image} alt="Guess the word" className="img-fluid rounded shadow-sm mb-3" style={{maxHeight: '200px', objectFit: 'cover'}} />
                         {message && <div className={`alert ${message.includes('เก่ง') ? 'alert-success' : 'alert-warning'} mb-3`}>{message}</div>}
                         <div className="d-flex justify-content-center mb-3" style={{flexWrap: 'wrap'}}>
@@ -291,11 +296,19 @@ const Home = () => {
     );
 };
 
-const containerStyle = {
+const containerStyleMain = {
     backgroundImage: 'url("https://64.media.tumblr.com/bee1e64cc1ed55cfcb496698f75f96d0/tumblr_psa72l8zUo1upcvga_1280.gif")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     minHeight: '100vh',
+    padding: '20px',
+};
+
+const containerStyle = {
+    backgroundImage: 'url("https://64.media.tumblr.com/bee1e64cc1ed55cfcb496698f75f96d0/tumblr_psa72l8zUo1upcvga_1280.gif")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    minHeight: '100dvh',
     padding: '20px',
 };
 

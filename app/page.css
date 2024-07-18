@@ -1,12 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Sriracha&display=swap');
+
+
 * {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    font-family: "Sriracha", cursive !important;
 }
 
 body {
-    font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+    /*font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;*/
     background-color: #f0f8ff;  /* สีพื้นหลังอ่อนๆ */
 }
 
