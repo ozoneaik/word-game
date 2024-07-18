@@ -14,9 +14,8 @@ body {
     background-color: #f0f8ff;  /* สีพื้นหลังอ่อนๆ */
 }
 
-.btn-lg {
-    font-size: 1.5rem;
-    padding: 0.75rem 1.5rem;
+.ICON {
+    color: white !important;
 }
 
 .alert {
