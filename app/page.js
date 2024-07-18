@@ -192,7 +192,7 @@ const Home = () => {
 
     if (gameOver) {
         return (
-            <Container className="mt-5" style={containerStyle}>
+            <Container className="" style={containerStyle}>
                 <Row className="justify-content-center">
                     <Col xs={12} md={8}>
                         <div className="bg-light p-4 rounded shadow-sm text-center">
@@ -209,7 +209,7 @@ const Home = () => {
 
     if (!gameStarted) {
         return (
-            <Container className="mt-5" style={containerStyle}>
+            <Container className="" style={containerStyle}>
                 <Row className="justify-content-center">
                     <Col xs={12} md={8}>
                         <div className="text-center">
@@ -224,7 +224,7 @@ const Home = () => {
 
     if (currentWords.length === 0) {
         return (
-            <Container className="mt-5" style={containerStyle}>
+            <Container className="" style={containerStyle}>
                 <Row className="justify-content-center">
                     <Col xs={12} md={8}>
                         <p className="text-center">กำลังโหลด...</p>
@@ -235,7 +235,7 @@ const Home = () => {
     }
 
     return (
-        <Container className="mt-3" style={containerStyle}>
+        <Container className="" style={containerStyle}>
             <Row className="justify-content-center">
                 <Col xs={12} md={8}>
                     <div className="text-center">
@@ -251,7 +251,13 @@ const Home = () => {
                                 <div
                                     key={index}
                                     className="rounded border border-primary d-flex align-items-center justify-content-center m-1"
-                                    style={{ width: '40px', height: '40px', cursor: letter ? 'pointer' : 'default', fontSize: '20px' }}
+                                    style={{
+                                        width: '60px',
+                                        height: '60px',
+                                        cursor: letter ? 'pointer' : 'default',
+                                        fontSize: '24px',
+                                        backgroundColor: 'white'
+                                    }}
                                     onDragOver={(e) => e.preventDefault()}
                                     onDrop={(e) => {
                                         e.preventDefault();
@@ -270,7 +276,12 @@ const Home = () => {
                                 <div
                                     key={index}
                                     className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center m-1"
-                                    style={{ width: '40px', height: '40px', cursor: 'pointer', fontSize: '20px' }}
+                                    style={{
+                                        width: '50px',
+                                        height: '50px',
+                                        cursor: 'pointer',
+                                        fontSize: '24px'
+                                    }}
                                     draggable
                                     onDragStart={(e) => handleDragStart(e, letter)}
                                 >
